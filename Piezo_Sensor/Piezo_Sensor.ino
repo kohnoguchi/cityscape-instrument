@@ -1,78 +1,46 @@
 /*
-  Knock Sensor
+  Moving Average analog input and send over serial
 
-  This sketch reads a piezo element to detect a knocking sound.
-  It reads an analog pin and compares the result to a set threshold.
-  If the result is greater than the threshold, it writes "knock" to the serial
-  port, and toggles the LED on pin 13.
+  Reference voltage set to 1V
 
-  The circuit:
-    - positive connection of the piezo attached to analog in 0
-    - negative connection of the piezo attached to ground
-    - 1 megohm resistor attached from analog in 0 to ground
-
-  created 25 Mar 2007
-  by David Cuartielles <http://www.0j0.org>
-  modified 30 Aug 2011
-  by Tom Igoe
-
-  This example code is in the public domain.
-
-  http://www.arduino.cc/en/Tutorial/Knock
-*/
-
-
-// these constants won't change:
+  NOTE: May be worth setting External Reference to 0.1V
+ */
 
 const int knockSensor = A0; // the piezo is connected to analog pin 0
-const int threshold1 = 100;
-const int threshold2 = 200;
-const int threshold3 = 300;
-const int threshold4 = 400;
-const int threshold5 = 500;
-
-
+const unsigned long piezoAverage  = 100;
 // these variables will change:
-int sensorReading = 0;      // variable to store the value read from the sensor pin
+unsigned long  sensorReading = 0;      // variable to store the value read from the sensor pin
+unsigned int movingAverage[piezoAverage] = {0};
+unsigned int windowIndex = 0;
 
-void setup() {
-
-  Serial.begin(9600);       // use the serial port
+void setup()
+{
+  Serial.begin(115200);       // use the serial port
+  analogReference(INTERNAL);
+  for (int i = 0; i < piezoAverage; ++i)
+    movingAverage[i] = 0;
 }
 
-void loop() {
-  // read the sensor and store it in the variable sensorReading:
-  sensorReading = analogRead(knockSensor);
+void loop()
+{
+  addToWindow(analogRead(knockSensor));
+  sensorReading = 0;
 
-  // if the sensor reading is greater than the threshold:
-  if (sensorReading >= threshold1) {
-
-    Serial.println('1');
-  }
-  if (sensorReading >= threshold2) {
-
-    Serial.println('2');
-  }
-  if (sensorReading >= threshold3) {
-
-    Serial.println('3');
-  }
-  if (sensorReading >= threshold4) {
-
-    Serial.println('4');
-  }
-  if (sensorReading >= threshold5) {
-
-    Serial.println('5');
-  }
-
-
-  else if (sensorReading < threshold1)
+  for (int i = 0; i < piezoAverage; ++i)
   {
-    Serial.println('0');
+    sensorReading += movingAverage[i];
   }
 
+  sensorReading /= piezoAverage;
+
+  Serial.write(constrain((sensorReading * 3) / 2, 0 , 255));
+  delay(33);  // delay to avoid overloading the serial port buffer
+}
 
 
-  delay(100);  // delay to avoid overloading the serial port buffer
+void addToWindow(unsigned int newValue)
+{
+  movingAverage[windowIndex] = newValue;
+  windowIndex++;
+  windowIndex %= piezoAverage;
 }
