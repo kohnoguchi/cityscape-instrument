@@ -1,4 +1,4 @@
-
+//code for crit
 #include <MPU6050_tockn.h>
 #include <Wire.h>
 int state = 0; //connect to Bluetooth
