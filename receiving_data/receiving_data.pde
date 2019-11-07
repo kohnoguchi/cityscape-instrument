@@ -10,7 +10,7 @@ int val;     // Data received from the serial port
 void setup()
 {
   size(400,400);
-  String portName = Serial.list()[11]; //change the 0 to a 1 or 2 etc. to match your port
+  String portName = Serial.list()[3]; //change the 0 to a 1 or 2 etc. to match your port
   printArray(Serial.list());
   myPort = new Serial(this, portName, 115200);
 }

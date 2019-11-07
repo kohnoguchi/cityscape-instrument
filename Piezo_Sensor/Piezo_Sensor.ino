@@ -1,8 +1,6 @@
 /*
   Moving Average analog input and send over serial
-
   Reference voltage set to 1V
-
   NOTE: May be worth setting External Reference to 0.1V
  */
 
