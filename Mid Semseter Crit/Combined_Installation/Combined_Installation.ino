@@ -21,22 +21,17 @@ void setup()
   Serial.begin(9600);
   Wire.begin();
   mpu6050.begin();
-  mpu6050.calcGyroOffsets(true);
+//  mpu6050.calcGyroOffsets(true);
 }
 
-void loop() {
-
-  if (Serial.available() > 0) { // Checks whether data is comming from the serial port
-    state = Serial.read();
-  }// Reads the data from the serial port
-
-
+void loop()
+{
   mpu6050.update();
   angleZ = mpu6050.getAngleZ();
-//  Serial.print("angleZ : ");
+  //  Serial.print("angleZ : ");
   angleZ = wrapTo180(angleZ);
-//  Serial.println(angleZ);
+  //  Serial.println(angleZ);
   angleToNumber = map(angleZ, -180, 180, 1, 9);
-  Serial.write(angleToNumber);
-  delay(1000);
+  Serial.println(mpu6050.getAngleZ());
+  delay(100);
 }
