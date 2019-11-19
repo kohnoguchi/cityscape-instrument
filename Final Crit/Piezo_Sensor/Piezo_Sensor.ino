@@ -31,7 +31,7 @@ void loop()
 
   sensorReading /= piezoAverage;
 
-  Serial.write(constrain((sensorReading * 3) / 2, 0 , 255));
+  Serial.write(map(constrain((sensorReading * 3) / 2, 0 , 255), 0, 255, 1, 5));
   delay(33);  // delay to avoid overloading the serial port buffer
 }
 
