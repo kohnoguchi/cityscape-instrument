@@ -13,7 +13,7 @@ BandPass bandPass;
 TriOsc triangle;
 float amp=0.0;
 float freq = 100;
-final int numPiezos = 2;
+final int numPiezos = 1;
 int[] serialBuffer = new int[numPiezos];
 
 void setup() {
@@ -38,21 +38,25 @@ void setup() {
 void draw() 
 {
   background(50);
-  //if ( myPort.available() > 0)
-  //{
-  //  val = myPort.read();
-  //}
-  int j = 0;
-  while ( myPort.available() > 0)
+  if ( myPort.available() > 0)
   {
-    if (j >= serialBuffer.length)
-      break;    
-    serialBuffer[j] = myPort.read();
-    j++;
-    val = myPort.read();    
+    val = myPort.read();
+    bandPass.freq(val);
+
+
+    //int j = 0;
+    //while ( myPort.available() > 0)
+    //{
+    //  if (j >= serialBuffer.length)
+    //    break;    
+    //  serialBuffer[j] = myPort.read();
+    //  j++;
+    //val = myPort.read();    
     //println(map(val, 0, 50, 440, 1760)); //print it out in the console
-    file.freq((map(val, 0, 50, 440, 1760));
-    file.amp((map(val, 0, 50, 440, 1760));
+    //file.loop();
+    //((map(val, 0, 50, 440, 1760));
+    //file.amp((map(val, 0, 50, 440, 1760)));
+    //file.amp((map(val, 0, 50, 440, 1760)));
   }
   for ( int i = 0; i < serialBuffer.length; i++)
   {

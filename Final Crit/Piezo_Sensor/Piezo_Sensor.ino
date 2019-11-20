@@ -7,8 +7,7 @@
 
 
 // these variables will change:
-const uint8_t numPiezo = 2;
-const int knockSensor[2] = {A0, A1}; // the piezo is connected to analog pin 0
+const int knockSensor[2] = {A0}; // the piezo is connected to analog pin 0
 unsigned long sensorReading[numPiezo] = {0};      // variable to store the value read from the sensor pin
 const unsigned long piezoAverage  = 30;
 unsigned int movingAverage[numPiezo][piezoAverage] = {{0}};
